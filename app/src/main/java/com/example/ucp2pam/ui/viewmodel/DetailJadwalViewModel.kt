@@ -60,3 +60,26 @@ class DetailJadwalViewModel(
     }
 }
 
+data class DetailUiState(
+    val detailUiEvent: JadwalEvent = JadwalEvent(),
+    val isLoading: Boolean = false,
+    val isError: Boolean = false,
+    val errorMessage: String = ""
+) {
+    val isUiEventEmpty: Boolean
+        get() = detailUiEvent == JadwalEvent()
+
+    val isUiEventNotEmpty: Boolean
+        get() = detailUiEvent != JadwalEvent()
+}
+
+fun Jadwal.toDetailUiEvent(): JadwalEvent {
+    return JadwalEvent(
+        idAntrian = idAntrian,
+        namaDokter = namaDokter,
+        namaPasien = namaPasien,
+        noHp = noHp,
+        tanggal = tanggal,
+        status = status
+    )
+}

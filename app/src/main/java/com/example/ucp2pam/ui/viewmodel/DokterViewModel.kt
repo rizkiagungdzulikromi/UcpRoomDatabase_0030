@@ -96,3 +96,40 @@ class DokterViewModel(private val repositoryDr: RepositoryDr) : ViewModel() {
         )
 }
 
+data class DokterUiState(
+    val listDr:List<Dokter> = listOf(),
+    val isLoading: Boolean = false,
+    val isError: Boolean = false,
+    val errorMessage: String = "",
+    val dokterEvent: DokterEvent = DokterEvent(),
+    val isEntryValid: FormErrorState = FormErrorState(),
+    val snackBarMessage: String? = null
+)
+
+data class FormErrorState(
+    val idDr: String? = null,
+    val nama: String? = null,
+    val spesialis: String? = null
+) {
+    fun isValid(): Boolean {
+        return idDr == null && nama == null && spesialis == null
+    }
+}
+
+fun DokterEvent.toDokterEntity(): Dokter = Dokter(
+    idDr = idDr,
+    nama = nama,
+    spesialis = spesialis,
+    JamKerja = Jamkerja,
+    klinik = klinik,
+    noHp = noHp
+)
+
+data class DokterEvent(
+    val idDr: String = "",
+    val nama: String = "",
+    val spesialis: String = "",
+    val Jamkerja: String = "",
+    val klinik: String = "",
+    val noHp: String = ""
+)

@@ -147,3 +147,73 @@ object DestinasiInsertDr : AlamatNavigasi {
     override val route: String = "insert_dokter"
 }
 
+@Preview(showBackground = true)
+@Composable
+fun FormDokter(
+    dokterEvent: DokterEvent = DokterEvent(),
+    onValueChange: (DokterEvent) -> Unit = { },
+    errorState: FormErrorState = FormErrorState(),
+    modifier: Modifier = Modifier
+) {
+    val spesialis = listOf("Umum", "Jantung", "Anak", "Hewan", "Saraf", "Kandungan")
+
+
+    Column(
+        modifier = modifier.fillMaxWidth().padding(20.dp)
+    ) {
+        OutlinedTextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = dokterEvent.nama,
+            onValueChange = {
+                onValueChange(dokterEvent.copy(nama = it))
+            },
+            label = { Text("Nama") },
+            isError = errorState.nama != null,
+            placeholder = { Text("Masukkan Nama")},
+        )
+        Text(
+            text = errorState.nama ?: "",
+            color = Color.Red
+        )
+        OutlinedTextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = dokterEvent.idDr,
+            onValueChange = {
+                onValueChange(dokterEvent.copy(idDr = it))
+            },
+            label = { Text("ID DOKTER") },
+            isError = errorState.idDr != null,
+            placeholder = { Text("Masukkan ID DOKTER")},
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+
+        )
+        Text(
+            text = errorState.idDr ?: "",
+            color = Color.Red
+        )
+        Spacer(modifier = Modifier.height(15.dp))
+        Text(text = "SPESIALIS")
+        Column(modifier = Modifier.fillMaxWidth())
+        {
+            spesialis.forEach{ sp ->
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Start,
+                    modifier = Modifier.padding(vertical = 4.dp)
+                ) {
+                    RadioButton(
+                        selected = dokterEvent.spesialis == sp,
+                        onClick = {
+                            onValueChange(dokterEvent.copy(spesialis = sp))
+                        },
+                    )
+                    Text(text = sp,)
+                }
+            }
+        }
+        Text(
+            text = errorState.spesialis ?: "",
+            color = Color.Red
+        )
+    }
+}

@@ -1,7 +1,5 @@
 package com.example.ucp2pam.dependeciesinjection
 
-package com.example.ucp2pam.dependeciesinjection
-
 import android.content.Context
 import com.example.ucp2pam.data.database.KlinikDatabase
 import com.example.ucp2pam.repository.LocalRepositoryDr

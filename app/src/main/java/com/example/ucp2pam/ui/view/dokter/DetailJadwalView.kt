@@ -138,3 +138,71 @@ fun BodyDetailJd(
     }
 }
 
+@Composable
+fun ItemDetailJd(
+    modifier: Modifier = Modifier,
+    jadwal: Jadwal
+) {
+    Card(
+        modifier = modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface,
+            contentColor = MaterialTheme.colorScheme.onSurface
+        ),
+        elevation = CardDefaults.cardElevation(8.dp)
+    ) {
+        Column(
+            modifier = Modifier.padding(16.dp)
+        ) {
+            ComponentDetailJd(judul = "ID ANTRIAN", data = jadwal.idAntrian)
+            Spacer(modifier = Modifier.height(8.dp))
+            ComponentDetailJd(judul = "Nama DR", data = jadwal.namaDokter)
+            Spacer(modifier = Modifier.height(8.dp))
+            ComponentDetailJd(judul = "NAMA PASIEN", data = jadwal.namaPasien)
+            Spacer(modifier = Modifier.height(8.dp))
+            ComponentDetailJd(judul = "NO HP", data = jadwal.noHp)
+            Spacer(modifier = Modifier.height(8.dp))
+            ComponentDetailJd(judul = "TANGGAL", data = jadwal.tanggal)
+            Spacer(modifier = Modifier.height(8.dp))
+            ComponentDetailJd(judul = "STATUS", data = jadwal.status)
+        }
+    }
+}
+
+@Composable
+fun ComponentDetailJd(
+    modifier: Modifier = Modifier,
+    judul: String,
+    data: String
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(4.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = judul,
+            Modifier.weight(0.8f),
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.Gray
+        )
+        Text(
+            text = ":",
+            Modifier.weight(0.2f),
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.Gray
+        )
+        Text(
+            text = data,
+            Modifier.weight(2f),
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Normal,
+            color = Color.Black
+        )
+    }
+}
+

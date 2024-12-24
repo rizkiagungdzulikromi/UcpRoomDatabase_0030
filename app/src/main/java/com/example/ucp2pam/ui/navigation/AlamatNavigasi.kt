@@ -1,10 +1,5 @@
 package com.example.ucp2pam.ui.navigation
 
-AlamatNavigasi
-
-package com.example.ucp2pam.ui.navigation
-
-
 interface AlamatNavigasi {
     val route: String
 }

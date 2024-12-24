@@ -70,3 +70,71 @@ fun DetailJadwalView(
     }
 }
 
+@Composable
+fun BodyDetailJd(
+    modifier: Modifier = Modifier,
+    detailUiState: DetailUiState = DetailUiState(),
+    onDeleteClick: () -> Unit = {}
+) {
+    var deleteConfirmationRequired by rememberSaveable { mutableStateOf(false) }
+
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState()),
+        contentAlignment = Alignment.TopCenter
+    ) {
+        when {
+            detailUiState.isLoading -> {
+                CircularProgressIndicator()
+            }
+
+            detailUiState.detailUiEvent != null -> {
+                Column(
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .fillMaxWidth()
+                ) {
+                    ItemDetailJd(
+                        jadwal = detailUiState.detailUiEvent.toJadwalEntity()
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Button(
+                        onClick = { deleteConfirmationRequired = true },
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Red),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Delete,
+                            contentDescription = "Delete",
+                            tint = Color.White
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(text = "Delete", color = Color.White)
+                    }
+                }
+            }
+
+            else -> {
+                Text(
+                    text = "Data Tidak Ditemukan",
+                    modifier = Modifier.padding(16.dp),
+                    color = Color.Gray
+                )
+            }
+        }
+
+        if (deleteConfirmationRequired) {
+            DeleteConfDialog(
+                onDeleteConfirm = {
+                    deleteConfirmationRequired = false
+                    onDeleteClick()
+                },
+                onDeleteCancel = {
+                    deleteConfirmationRequired = false
+                }
+            )
+        }
+    }
+}
+

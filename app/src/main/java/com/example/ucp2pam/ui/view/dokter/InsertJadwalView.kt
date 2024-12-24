@@ -121,3 +121,139 @@ fun InsertJadwalView(
     }
 }
 
+@Composable
+fun FormJd(
+    jadwalEvent: JadwalEvent,
+    onValueChange: (JadwalEvent) -> Unit,
+    onNavigateJadwal: () -> Unit,
+    errorState: FormErrorStateJd,
+    modifier: Modifier = Modifier,
+    dokterViewModel: DokterViewModel = viewModel(factory = PenyediaViewModel.Factory)
+) {
+    val dokterUiState by dokterViewModel.dokterUiState.collectAsState()
+    val dokterList = dokterUiState.listDr.map { it.nama }
+    val statusList = listOf("Emergency", "Not Emergency")
+
+    Column(modifier = modifier.fillMaxWidth().padding(20.dp)) {
+        OutlinedTextField(
+            value = jadwalEvent.idAntrian,
+            onValueChange = { onValueChange(jadwalEvent.copy(idAntrian = it)) },
+            label = { Text("ID ANTRIAN") },
+            isError = errorState.idAntrian != null,
+            placeholder = { Text("Masukkan ID ANTRIAN") },
+            modifier = Modifier.fillMaxWidth()
+        )
+        Text(
+            text = errorState.idAntrian ?: "",
+            color = Color.Red
+        )
+
+        OutlinedTextField(
+            value = jadwalEvent.namaPasien,
+            onValueChange = { onValueChange(jadwalEvent.copy(namaPasien = it)) },
+            label = { Text("Nama Pasien") },
+            isError = errorState.namaPasien != null,
+            placeholder = { Text("Masukkan Nama Pasien") },
+            modifier = Modifier.fillMaxWidth()
+        )
+        Text(
+            text = errorState.namaPasien ?: "",
+            color = Color.Red
+        )
+
+        Spacer(modifier = Modifier.height(15.dp))
+        DropdownMenuField(
+            label = "STATUS",
+            options = statusList,
+            selectedOption = jadwalEvent.status,
+            onOptionSelected = { onValueChange(jadwalEvent.copy(status = it)) }
+        )
+        Text(
+            text = errorState.status ?: "",
+            color = Color.Red
+        )
+
+        OutlinedTextField(
+            value = jadwalEvent.tanggal,
+            onValueChange = { onValueChange(jadwalEvent.copy(tanggal = it)) },
+            label = { Text("tanggal") },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            isError = errorState.tanggal != null,
+            placeholder = { Text("Masukkan Tanggal") },
+            modifier = Modifier.fillMaxWidth()
+        )
+        Text(
+            text = errorState.tanggal ?: "",
+            color = Color.Red
+        )
+
+        OutlinedTextField(
+            value = jadwalEvent.noHp,
+            onValueChange = { onValueChange(jadwalEvent.copy(noHp = it)) },
+            label = { Text("NO TELP") },
+            isError = errorState.noHp != null,
+            placeholder = { Text("Masukkan NO TELP") },
+            modifier = Modifier.fillMaxWidth()
+        )
+        Text(
+            text = errorState.noHp ?: "",
+            color = Color.Red
+        )
+
+        Spacer(modifier = Modifier.height(15.dp))
+        DropdownMenuField(
+            label = "DOKTER",
+            options = dokterList,
+            selectedOption = jadwalEvent.namaDokter,
+            onOptionSelected = { onValueChange(jadwalEvent.copy(namaDokter = it)) }
+        )
+        Text(
+            text = errorState.namaDokter ?: "",
+            color = Color.Red
+        )
+    }
+}
+
+@Composable
+fun DropdownMenuField(
+    label: String,
+    options: List<String>,
+    selectedOption: String,
+    onOptionSelected: (String) -> Unit
+) {
+    var expanded by remember { mutableStateOf(false) }
+    var currentSelection by remember { mutableStateOf(selectedOption) }
+
+    Column {
+        OutlinedTextField(
+            value = currentSelection,
+            onValueChange = {},
+            readOnly = true,
+            label = { Text(label) },
+            trailingIcon = {
+                IconButton(onClick = { expanded = !expanded }) {
+                    Icon(
+                        imageVector = if (expanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
+                        contentDescription = "Dropdown"
+                    )
+                }
+            },
+            modifier = Modifier.fillMaxWidth()
+        )
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            options.forEach { option ->
+                DropdownMenuItem(
+                    text = { Text(option) },
+                    onClick = {
+                        currentSelection = option
+                        onOptionSelected(option)
+                        expanded = false
+                    }
+                )
+            }
+        }
+    }
+}
